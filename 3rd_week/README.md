@@ -1,4 +1,4 @@
-### BigQuery Homework
+# BigQuery Homework
 
 
 ## Retrieving the data and loading it to Google Cloud Storage (GCS)
@@ -28,54 +28,57 @@ python3 data_import.py green 2022
 From there, we can create the tables we need in a BigQuery dataset (I used the dataset I created in the first week):
 
 
-# Create external table:
+### Create external table:
 ```sql
-CREATE OR REPLACE EXTERNAL TABLE `ny-rides-gperezcenteno-411315.ny_taxi_week3.external_green_tripdata_2022`
+CREATE OR REPLACE EXTERNAL TABLE ny_taxi_week3.external_green_tripdata_2022
 OPTIONS (
   format = 'parquet',
   uris = ['https://storage.cloud.google.com/ny-rides-gperezcenteno-411315-terra-bucket/green/green_tripdata_2022-*.parquet']
 ); 
 ```
 
-# Create materialized table from external:
+### Create materialized table from external:
 ```sql
-CREATE OR REPLACE TABLE ny-rides-gperezcenteno-411315.ny_taxi_week3.green_tripdata_2022_non_partitioned AS
-SELECT * FROM ny-rides-gperezcenteno-411315.ny_taxi_week3.external_green_tripdata_2022;
+CREATE OR REPLACE TABLE ny_taxi_week3.green_tripdata_2022_non_partitioned AS
+SELECT * FROM ny_taxi_week3.external_green_tripdata_2022;
 ```
 
-# Create partitioned table from external:
+### Create partitioned table from external:
 ```sql
-CREATE OR REPLACE TABLE ny-rides-gperezcenteno-411315.ny_taxi_week3.green_tripdata_2022_partitioned
+CREATE OR REPLACE TABLE ny_taxi_week3.green_tripdata_2022_partitioned
 PARTITION BY DATE(lpep_pickup_datetime) 
 CLUSTER BY PULocationID 
 AS (
-  SELECT * FROM ny-rides-gperezcenteno-411315.ny_taxi_week3.external_green_tripdata_2022
+  SELECT * FROM ny_taxi_week3.external_green_tripdata_2022
 );
 ```
 
 And then, we can run the queries we need to get the answers to the homework questions from the tables we created:
 
-# Question 2:
+### Question 2:
 ```sql
-SELECT count(DISTINCT PULocationID) FROM `ny-rides-gperezcenteno-411315.ny_taxi_week3.external_green_tripdata_2022`;
+SELECT count(DISTINCT PULocationID) FROM `ny_taxi_week3.external_green_tripdata_2022`;
 -- 0.00 MB
+```
+```sql
 SELECT count(DISTINCT PULocationID) FROM `ny_taxi_week3.green_tripdata_2022_non_partitioned`;
 -- 6.41 MB
 ```
 
-# Question 3:
+### Question 3:
 ```sql
 SELECT count(*) FROM `ny_taxi_week3.green_tripdata_2022_non_partitioned` WHERE fare_amount = 0;
 -- 1622
 ```
 
-# Question 5:
+### Question 5:
 ```sql
 SELECT DISTINCT PULocationID 
 FROM `ny_taxi_week3.green_tripdata_2022_non_partitioned` 
 WHERE lpep_pickup_datetime between '2022-06-01' AND '2022-06-30';
 -- 12.82 MB
-
+```
+```sql
 SELECT DISTINCT PULocationID 
 FROM `ny_taxi_week3.green_tripdata_2022_partitioned` 
 WHERE lpep_pickup_datetime between '2022-06-01' AND '2022-06-30';

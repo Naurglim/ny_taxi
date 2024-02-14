@@ -2,7 +2,7 @@
 
 First rename `dev.env` to simply `.env`— this will _ensure_ the file is not committed to Git by accident, since it _will_ contain credentials in the future.
 
-First we build the container
+Then we build the container
 ```bash
 docker-compose build
 ```

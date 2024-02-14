@@ -57,30 +57,30 @@ And then, we can run the queries we need to get the answers to the homework ques
 
 ### Question 2:
 ```sql
-SELECT count(DISTINCT PULocationID) FROM `ny_taxi_week3.external_green_tripdata_2022`;
+SELECT count(DISTINCT PULocationID) FROM ny_taxi_week3.external_green_tripdata_2022;
 -- 0.00 MB
 ```
 ```sql
-SELECT count(DISTINCT PULocationID) FROM `ny_taxi_week3.green_tripdata_2022_non_partitioned`;
+SELECT count(DISTINCT PULocationID) FROM ny_taxi_week3.green_tripdata_2022_non_partitioned;
 -- 6.41 MB
 ```
 
 ### Question 3:
 ```sql
-SELECT count(*) FROM `ny_taxi_week3.green_tripdata_2022_non_partitioned` WHERE fare_amount = 0;
+SELECT count(*) FROM ny_taxi_week3.green_tripdata_2022_non_partitioned WHERE fare_amount = 0;
 -- 1622
 ```
 
 ### Question 5:
 ```sql
 SELECT DISTINCT PULocationID 
-FROM `ny_taxi_week3.green_tripdata_2022_non_partitioned` 
+FROM ny_taxi_week3.green_tripdata_2022_non_partitioned 
 WHERE lpep_pickup_datetime between '2022-06-01' AND '2022-06-30';
 -- 12.82 MB
 ```
 ```sql
 SELECT DISTINCT PULocationID 
-FROM `ny_taxi_week3.green_tripdata_2022_partitioned` 
+FROM ny_taxi_week3.green_tripdata_2022_partitioned 
 WHERE lpep_pickup_datetime between '2022-06-01' AND '2022-06-30';
 -- 1.12 MB
 ```
